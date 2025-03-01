@@ -1,5 +1,5 @@
 /**
- * Copyright 2024 Sleep API Authors
+ * Copyright 2025 Neroli's Lab Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,13 @@
 
 import seedrandom from 'seedrandom';
 
-// Fixed seed for consistent random number generation
 const FIXED_SEED = 'seed';
 
-// Maximum value for uint8 (256 values: 0-255)
 const UINT8_MAX = 255;
 
 /**
- * Global store for pre-generated random numbers
+ * Global store for pre-generated random numbers, shared among
+ * all instances of EnhancedRandom
  */
 export class RandomNumberStore {
   private static instance: RandomNumberStore;
@@ -36,9 +35,6 @@ export class RandomNumberStore {
     this.initialize();
   }
 
-  /**
-   * Get the singleton instance of RandomNumberStore
-   */
   public static getInstance(size?: number): RandomNumberStore {
     if (!RandomNumberStore.instance) {
       RandomNumberStore.instance = new RandomNumberStore(size);
@@ -46,9 +42,6 @@ export class RandomNumberStore {
     return RandomNumberStore.instance;
   }
 
-  /**
-   * Initialize the random number store with pre-generated values
-   */
   private initialize(): void {
     const rng = seedrandom.alea(FIXED_SEED);
     for (let i = 0; i < this.size; i++) {
@@ -79,9 +72,6 @@ export class RandomNumberStore {
     return this.randomNumbers[index];
   }
 
-  /**
-   * Get the size of the random number store
-   */
   public getSize(): number {
     return this.size;
   }
@@ -109,22 +99,20 @@ export interface EnhancedRandom {
 }
 
 /**
- * Factory function to create an enhanced random number generator
- * that uses pre-generated random numbers
+ * Create an EnhancedRandom object which produces a deterministic
+ * sequence of random numbers
  * @returns An EnhancedRandom object
  */
 export function createPreGeneratedRandom(): EnhancedRandom {
   const store = RandomNumberStore.getInstance();
   let index = 0;
 
-  // Create the base random function
   const randomFn = function (): number {
     const value = store.getRandomNumber(index);
     index = index + 1;
     return value;
   };
 
-  // Add a method to get raw uint8 values
   randomFn.getUint8 = function (): number {
     const value = store.getRawUint8(index);
     index = index + 1;
