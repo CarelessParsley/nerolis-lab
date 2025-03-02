@@ -1,5 +1,5 @@
 import { createPreGeneratedRandom } from '@src/utils/random-utils/pre-generated-random.js';
-import type { EnhancedRandom } from '@src/utils/random-utils/pre-generated-random.js';
+import type { PreGeneratedRandom } from '@src/utils/random-utils/pre-generated-random.js';
 import type {
   UserRecipeFlat,
   UserRecipes
@@ -35,7 +35,7 @@ export class CookingState {
   private bonusCritChance = 0;
   private totalCritChance = 0;
   private totalWeekdayPotSize = 0;
-  private rng: EnhancedRandom;
+  private rng: PreGeneratedRandom;
 
   private userCurries: UserRecipeFlat[];
   private userSalads: UserRecipeFlat[];
@@ -58,7 +58,7 @@ export class CookingState {
   private currentSaladStockpile: IngredientIndexToFloatAmount;
   private currentDessertStockpile: IngredientIndexToFloatAmount;
 
-  constructor(settings: TeamSettingsExt, userRecipes: UserRecipes, rng: EnhancedRandom | null = null) {
+  constructor(settings: TeamSettingsExt, userRecipes: UserRecipes, rng: PreGeneratedRandom | null = null) {
     const { curries, salads, desserts } = userRecipes;
     this.userCurries = curries;
     this.userSalads = salads;

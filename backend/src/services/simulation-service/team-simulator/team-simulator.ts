@@ -23,7 +23,7 @@ import type {
 import { getDefaultMealTimes } from '@src/utils/meal-utils/meal-utils.js';
 import { createPreGeneratedRandom } from '@src/utils/random-utils/pre-generated-random.js';
 import { TimeUtils } from '@src/utils/time-utils/time-utils.js';
-import type { EnhancedRandom } from '@src/utils/random-utils/pre-generated-random.js';
+import type { PreGeneratedRandom } from '@src/utils/random-utils/pre-generated-random.js';
 import type {
   CalculateTeamResponse,
   MemberProductionBase,
@@ -37,7 +37,7 @@ import { mockMainskill } from 'sleepapi-common';
 
 export class TeamSimulator {
   private run = 0;
-  private rng: EnhancedRandom;
+  private rng: PreGeneratedRandom;
 
   private memberStates: MemberState[] = [];
   private memberStatesWithoutFillers: MemberState[] = [];
@@ -57,7 +57,7 @@ export class TeamSimulator {
     members: TeamMemberExt[];
     cookingState?: CookingState;
     iterations: number;
-    rng?: EnhancedRandom;
+    rng?: PreGeneratedRandom;
   }) {
     const { settings, members, cookingState, iterations, rng } = params;
 

@@ -4,7 +4,7 @@ import { CookingState } from '@src/services/simulation-service/team-simulator/co
 import type { UserRecipes } from '@src/services/simulation-service/team-simulator/cooking-state/cooking-utils.js';
 import { TeamSimulator } from '@src/services/simulation-service/team-simulator/team-simulator.js';
 import { createPreGeneratedRandom } from '@src/utils/random-utils/pre-generated-random.js';
-import type { EnhancedRandom } from '@src/utils/random-utils/pre-generated-random.js';
+import type { PreGeneratedRandom } from '@src/utils/random-utils/pre-generated-random.js';
 import { getIngredientSet } from '@src/utils/production-utils/production-utils.js';
 import type {
   CalculateIvResponse,
@@ -139,7 +139,7 @@ export function calculateTeam(
 ) {
   const { settings, members, userRecipes } = params;
 
-  const rng: EnhancedRandom = createPreGeneratedRandom();
+  const rng: PreGeneratedRandom = createPreGeneratedRandom();
   const cookingState = settings.includeCooking ? new CookingState(settings, userRecipes, rng) : undefined;
   const teamSimulator = new TeamSimulator({ settings, members, cookingState, iterations, rng });
 
@@ -156,7 +156,7 @@ export function calculateSimple(
 ) {
   const { settings, members, userRecipes } = params;
 
-  const rng: EnhancedRandom = createPreGeneratedRandom();
+  const rng: PreGeneratedRandom = createPreGeneratedRandom();
   const cookingState = settings.includeCooking ? new CookingState(settings, userRecipes, rng) : undefined;
   const teamSimulator = new TeamSimulator({
     settings,
@@ -179,7 +179,7 @@ export function calculateIv(
 ): CalculateIvResponse {
   const { settings, members, variants } = params;
 
-  const rng: EnhancedRandom = createPreGeneratedRandom();
+  const rng: PreGeneratedRandom = createPreGeneratedRandom();
   const variantResults: MemberProductionBase[] = [];
   for (const variant of variants) {
     const teamWithVariant = [variant, ...members];

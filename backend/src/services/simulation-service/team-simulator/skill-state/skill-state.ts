@@ -27,14 +27,14 @@ import type {
   SkillActivationValue,
   TeamSkillActivation
 } from '@src/services/simulation-service/team-simulator/skill-state/skill-state-types.js';
-import type { EnhancedRandom } from '@src/utils/random-utils/pre-generated-random.js';
+import type { PreGeneratedRandom } from '@src/utils/random-utils/pre-generated-random.js';
 import type { Mainskill, MemberSkillValue } from 'sleepapi-common';
 import { calculatePityProcThreshold, defaultZero, mainskill, mainskillUnits } from 'sleepapi-common';
 
 export class SkillState {
   memberState: MemberState;
   skillEffects: Map<Mainskill, SkillEffect>;
-  rng: EnhancedRandom;
+  rng: PreGeneratedRandom;
 
   // quick access
   private pityProcThreshold;
@@ -53,7 +53,7 @@ export class SkillState {
   private skillCrits = 0;
   private skillProcsPerDay: number[] = [];
 
-  constructor(memberState: MemberState, rng: EnhancedRandom) {
+  constructor(memberState: MemberState, rng: PreGeneratedRandom) {
     this.memberState = memberState;
     this.rng = rng;
 

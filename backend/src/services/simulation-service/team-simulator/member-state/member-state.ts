@@ -10,7 +10,7 @@ import { SkillState } from '@src/services/simulation-service/team-simulator/skil
 import { TeamSimulatorUtils } from '@src/services/simulation-service/team-simulator/team-simulator-utils.js';
 import { getMealRecoveryAmount } from '@src/utils/meal-utils/meal-utils.js';
 import { TimeUtils } from '@src/utils/time-utils/time-utils.js';
-import type { EnhancedRandom } from '@src/utils/random-utils/pre-generated-random.js';
+import type { PreGeneratedRandom } from '@src/utils/random-utils/pre-generated-random.js';
 import { createPreGeneratedRandom } from '@src/utils/random-utils/pre-generated-random.js';
 import type {
   BerryIndexToFloatAmount,
@@ -52,7 +52,7 @@ export class MemberState {
   cookingState?: CookingState;
   private skillState: SkillState;
   private camp: boolean;
-  private rng: EnhancedRandom;
+  private rng: PreGeneratedRandom;
 
   // quick lookups, static data
   private pokemonWithIngredients: PokemonWithIngredientsIndexed;
@@ -155,7 +155,7 @@ export class MemberState {
     settings: TeamSettingsExt;
     cookingState: CookingState | undefined;
     iterations?: number;
-    rng?: EnhancedRandom;
+    rng?: PreGeneratedRandom;
   }) {
     const { member, team, settings, cookingState, iterations = 1, rng } = params;
 

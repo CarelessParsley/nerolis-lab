@@ -80,7 +80,7 @@ export class RandomNumberStore {
 /**
  * Custom type for our enhanced random number generator
  */
-export interface EnhancedRandom {
+export interface PreGeneratedRandom {
   /**
    * Get a random number between 0 and 1
    * @returns A random number between 0 and 1
@@ -109,7 +109,7 @@ export interface EnhancedRandom {
  * sequence of random numbers
  * @returns An EnhancedRandom object
  */
-export function createPreGeneratedRandom(): EnhancedRandom {
+export function createPreGeneratedRandom(): PreGeneratedRandom {
   const store = RandomNumberStore.getInstance();
   let index = 0;
 
@@ -137,7 +137,7 @@ export function createPreGeneratedRandom(): EnhancedRandom {
     return array[randomIndex];
   };
 
-  return randomFn as EnhancedRandom;
+  return randomFn as PreGeneratedRandom;
 }
 
 /**
