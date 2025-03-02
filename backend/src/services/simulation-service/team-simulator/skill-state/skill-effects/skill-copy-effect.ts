@@ -6,8 +6,7 @@ import { mainskill, mockPokemon } from 'sleepapi-common';
 export class SkillCopyEffect implements SkillEffect {
   activate(skillState: SkillState): TeamSkillActivation {
     const otherMembers = skillState.memberState.otherMembers;
-    const randomIndex = Math.floor(skillState.rng() * otherMembers.length);
-    const selectedMember = otherMembers.length > 0 ? otherMembers[randomIndex] : undefined;
+    const selectedMember = otherMembers.length > 0 ? skillState.rng.randomElement(otherMembers) : undefined;
 
     let copiedSkill = selectedMember?.pokemonWithIngredients.pokemon.skill;
 

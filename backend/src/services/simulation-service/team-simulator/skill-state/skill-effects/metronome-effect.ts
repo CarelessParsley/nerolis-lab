@@ -5,8 +5,7 @@ import { METRONOME_SKILLS } from 'sleepapi-common';
 
 export class MetronomeEffect implements SkillEffect {
   activate(skillState: SkillState): TeamSkillActivation {
-    const randomIndex = Math.floor(skillState.rng() * METRONOME_SKILLS.length);
-    const selectedSkill = METRONOME_SKILLS[randomIndex];
+    const selectedSkill = skillState.rng.randomElement(METRONOME_SKILLS);
 
     const metronomedSkill = skillState.skillEffects.get(selectedSkill!)?.activate(skillState);
     if (!metronomedSkill) {

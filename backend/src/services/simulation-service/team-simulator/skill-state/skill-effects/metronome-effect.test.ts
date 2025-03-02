@@ -16,19 +16,19 @@ describe('MetronomeEffect', () => {
 
   it('should activate a random skill from METRONOME_SKILLS', () => {
     const randomSkill = METRONOME_SKILLS[0];
-    vimic(RandomUtils, 'randomElement', () => randomSkill);
+    vimic(skillState.rng, 'randomElement', () => randomSkill);
     const mockActivate = vi.fn().mockReturnValue({ skill: skillState.skill });
     skillState.skillEffects.set(randomSkill, { activate: mockActivate });
 
     const result = metronomeEffect.activate(skillState);
 
-    expect(RandomUtils.randomElement).toHaveBeenCalledWith(METRONOME_SKILLS);
+    expect(skillState.rng.randomElement).toHaveBeenCalledWith(METRONOME_SKILLS);
     expect(mockActivate).toHaveBeenCalledWith(skillState);
     expect(result).toEqual({ skill: skillState.skill });
   });
 
   it('should log an error and return the original skill if the selected skill cannot be activated', () => {
-    vimic(RandomUtils, 'randomElement');
+    vimic(skillState.rng, 'randomElement');
     vimic(logger, 'error').mockImplementation(() => {});
 
     const result = metronomeEffect.activate(skillState);
