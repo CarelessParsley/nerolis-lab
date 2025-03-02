@@ -273,8 +273,7 @@ export class TeamSimulator {
     const allMembers = this.memberStates;
 
     const targetGroup = this.rng() < chanceTargetLowest ? lowestEnergyMembers : allMembers;
-    const randomIndex = Math.floor(this.rng() * targetGroup.length);
-    return [targetGroup[randomIndex]].filter((member): member is MemberState => member !== undefined);
+    return [this.rng.randomElement(targetGroup)].filter((member): member is MemberState => member !== undefined);
   }
 
   private collectInventory() {

@@ -96,6 +96,12 @@ export interface EnhancedRandom {
    * @returns The current index
    */
   getIndex(): number;
+  /**
+   * Get a random element from an array
+   * @param array The array to get a random element from
+   * @returns A random element from the array
+   */
+  randomElement<T>(array: T[]): T;
 }
 
 /**
@@ -121,6 +127,14 @@ export function createPreGeneratedRandom(): EnhancedRandom {
 
   randomFn.getIndex = function (): number {
     return index;
+  };
+
+  randomFn.randomElement = function <T>(array: T[]): T {
+    if (array.length === 0) {
+      throw new Error('Cannot get random element from empty array');
+    }
+    const randomIndex = Math.floor(randomFn() * array.length);
+    return array[randomIndex];
   };
 
   return randomFn as EnhancedRandom;
