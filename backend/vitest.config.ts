@@ -9,6 +9,7 @@ export default defineConfig({
   },
   test: {
     globals: true,
+    setupFiles: ['./src/vitest/setup.ts'],
     coverage: {
       reporter: ['text-summary', 'json', 'lcov'],
       exclude: [
@@ -18,7 +19,8 @@ export default defineConfig({
         '**/node_modules/**',
         '**/dist/**',
         '**/coverage/**',
-        '**/bun/**'
+        '**/bun/**',
+        '**/vitest/**'
       ]
     }
   }

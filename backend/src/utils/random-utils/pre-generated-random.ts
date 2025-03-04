@@ -21,25 +21,17 @@ const FIXED_SEED = 'seed';
 const UINT8_MAX = 255;
 
 /**
- * Global store for pre-generated random numbers, shared among
- * all instances of EnhancedRandom
+ * Global store for pre-generated random numbers
  */
-export class RandomNumberStore {
-  private static instance: RandomNumberStore;
+class RandomNumberStoreImpl {
   private randomNumbers: Uint8Array;
   private readonly size: number;
+  private index: number = 0;
 
-  private constructor(size: number = 10_000_000) {
+  constructor(size: number = 10_000_000) {
     this.size = size;
     this.randomNumbers = new Uint8Array(size);
     this.initialize();
-  }
-
-  public static getInstance(size?: number): RandomNumberStore {
-    if (!RandomNumberStore.instance) {
-      RandomNumberStore.instance = new RandomNumberStore(size);
-    }
-    return RandomNumberStore.instance;
   }
 
   private initialize(): void {
@@ -50,6 +42,16 @@ export class RandomNumberStore {
       // and never 256, maintaining the exclusive upper bound behavior
       this.randomNumbers[i] = Math.floor(rng() * UINT8_MAX);
     }
+  }
+
+  /**
+   * Get a random number between 0 and 1
+   * @returns A random number between 0 and 1
+   */
+  public random(): number {
+    const value = this.getRandomNumber(this.index);
+    this.index = this.index + 1;
+    return value;
   }
 
   /**
@@ -64,17 +66,88 @@ export class RandomNumberStore {
   }
 
   /**
+   * Get a raw uint8 value (0-255)
+   * @returns A uint8 value between 0 and 255
+   */
+  public getUint8(): number {
+    const value = this.getRawUint8(this.index);
+    this.index = this.index + 1;
+    return value;
+  }
+
+  /**
    * Get the raw uint8 value at a specific index
    * @param index The index to get the random number from
    * @returns A uint8 value between 0 and 255
    */
   public getRawUint8(index: number): number {
+    console.log(index);
     return this.randomNumbers[index];
   }
 
+  /**
+   * Get the current index
+   * @returns The current index
+   */
+  public getIndex(): number {
+    return this.index;
+  }
+
+  /**
+   * Get the size of the random number store
+   * @returns The size of the random number store
+   */
   public getSize(): number {
     return this.size;
   }
+
+  /**
+   * Reset the index to 0
+   * This is useful for tests to ensure deterministic behavior
+   */
+  public reset(): void {
+    this.index = 0;
+  }
+
+  /**
+   * Get a random element from an array
+   * @param array The array to get a random element from
+   * @returns A random element from the array
+   */
+  public randomElement<T>(array: T[]): T {
+    if (array.length === 0) {
+      throw new Error('Cannot get random element from empty array');
+    }
+    const randomIndex = Math.floor(this.random() * array.length);
+    return array[randomIndex];
+  }
+}
+
+// Export a singleton instance
+export const RandomNumberStore = new RandomNumberStoreImpl();
+
+/**
+ * Create a function that uses the RandomNumberStore to produce random numbers
+ * @returns A function that returns random numbers
+ */
+export function createPreGeneratedRandom() {
+  const randomFn = function (): number {
+    return RandomNumberStore.random();
+  };
+
+  randomFn.getUint8 = function (): number {
+    return RandomNumberStore.getUint8();
+  };
+
+  randomFn.getIndex = function (): number {
+    return RandomNumberStore.getIndex();
+  };
+
+  randomFn.randomElement = function <T>(array: T[]): T {
+    return RandomNumberStore.randomElement(array);
+  };
+
+  return randomFn as PreGeneratedRandom;
 }
 
 /**
@@ -102,42 +175,6 @@ export interface PreGeneratedRandom {
    * @returns A random element from the array
    */
   randomElement<T>(array: T[]): T;
-}
-
-/**
- * Create an EnhancedRandom object which produces a deterministic
- * sequence of random numbers
- * @returns An EnhancedRandom object
- */
-export function createPreGeneratedRandom(): PreGeneratedRandom {
-  const store = RandomNumberStore.getInstance();
-  let index = 0;
-
-  const randomFn = function (): number {
-    const value = store.getRandomNumber(index);
-    index = index + 1;
-    return value;
-  };
-
-  randomFn.getUint8 = function (): number {
-    const value = store.getRawUint8(index);
-    index = index + 1;
-    return value;
-  };
-
-  randomFn.getIndex = function (): number {
-    return index;
-  };
-
-  randomFn.randomElement = function <T>(array: T[]): T {
-    if (array.length === 0) {
-      throw new Error('Cannot get random element from empty array');
-    }
-    const randomIndex = Math.floor(randomFn() * array.length);
-    return array[randomIndex];
-  };
-
-  return randomFn as PreGeneratedRandom;
 }
 
 /**

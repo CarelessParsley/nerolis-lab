@@ -1,7 +1,7 @@
 import { mocks } from '@src/bun/index.js';
 import { MetronomeEffect } from '@src/services/simulation-service/team-simulator/skill-state/skill-effects/metronome-effect.js';
 import type { SkillState } from '@src/services/simulation-service/team-simulator/skill-state/skill-state.js';
-import { METRONOME_SKILLS, RandomUtils } from 'sleepapi-common';
+import { METRONOME_SKILLS } from 'sleepapi-common';
 import { vimic } from 'vimic';
 import { describe, expect, it } from 'vitest';
 
